@@ -59,7 +59,8 @@ public class UserController {
 			Optional<User> loggedInUser = userService.login(u);
 			loggedInUser.ifPresent(user -> {
 				Cookie cookie = new Cookie("my-key",Integer.toString(user.getId()));
-				response.addCookie(cookie);
+				cookie.setMaxAge(1 * 24 * 60 * 60);
+				response.addCookie(cookie) ;
 			});
 			
 		} catch (LoginUserFailedException e) {
@@ -81,8 +82,15 @@ public class UserController {
 	
 	@PostMapping("items/{id}")
 	public ResponseEntity<String> addItemToCart(@PathVariable("id") String id, HttpServletRequest request){
+		Cookie cookies;
+		try{
+			cookies = request.getCookies()[0];
+		}
+		catch (Exception e) {
+			return new ResponseEntity<>("You need to login.",HttpStatus.BAD_REQUEST);
+		}
 		
-		String cookie = request.getCookies()[0].getValue();
+		String cookie = cookies.getValue();
 		int userId = Integer.parseInt(cookie);
 		
 		int itemId = Integer.parseInt(id);
@@ -94,8 +102,15 @@ public class UserController {
 	
 	@PostMapping("order")
 	public ResponseEntity<String> addItemsToOrder(HttpServletRequest request){
-
-		String cookie = request.getCookies()[0].getValue();
+		Cookie cookies;
+		try{
+			cookies = request.getCookies()[0];
+		}
+		catch (Exception e) {
+			return new ResponseEntity<>("You need to login.",HttpStatus.BAD_REQUEST);
+		}
+		
+		String cookie = cookies.getValue();
 		int userId = Integer.parseInt(cookie);
 		
 		cartService.addItemToOrder(userId);
@@ -103,6 +118,14 @@ public class UserController {
 	}
 	@PostMapping("logout")
 	public ResponseEntity<String> logout(HttpServletResponse response, HttpServletRequest request){
+		Cookie cookies;
+		try{
+			cookies = request.getCookies()[0];
+		}
+		catch (Exception e) {
+			return new ResponseEntity<>("You need to login.",HttpStatus.BAD_REQUEST);
+		}
+		
 		Cookie cookie = new Cookie("my-key", null);
 		cookie.setMaxAge(0);
 		response.addCookie(cookie);

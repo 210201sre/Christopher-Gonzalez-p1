@@ -22,8 +22,7 @@ public class UserService {
 		Optional<User> isRegistered = userDAO.findByEmailAndPassword(u.getEmail(),u.getPassword());
 		
 		if (isRegistered.isPresent()) {
-			System.out.println(isRegistered);
-			throw new RegisterUserFailedException("Failed to register new User");
+			throw new RegisterUserFailedException();
 		}
 		
 		else {
@@ -36,8 +35,7 @@ public class UserService {
 		Optional<User> isLoggedIn = userDAO.findByEmailAndPassword(u.getEmail(), u.getPassword());
 		
 		if (!isLoggedIn.isPresent()) {
-			System.out.println(isLoggedIn);
-			throw new LoginUserFailedException("User does not exist");
+			throw new LoginUserFailedException();
 		}
 		return isLoggedIn;
 	}
