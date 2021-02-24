@@ -3,6 +3,9 @@ package com.revature.services;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,10 +18,17 @@ import com.revature.repositories.UserDAO;
 @Service
 public class UserService {
 
+	private static final Logger log = LoggerFactory.getLogger(UserService.class);
+	String event = "event";
+	String end = "Ending ==";
+	String uId = "userId";
+	
 	@Autowired
 	private UserDAO userDAO;
 	
 	public void register(User u) throws RegisterUserFailedException {
+		MDC.put(event, "Register");
+		log.info("Starting == registering a new user");
 		Optional<User> isRegistered = userDAO.findByEmailAndPassword(u.getEmail(),u.getPassword());
 		
 		if (isRegistered.isPresent()) {
@@ -28,19 +38,27 @@ public class UserService {
 		else {
 			userDAO.insertToUsers(u.getEmail(),u.getPassword());
 		}
+		log.info("Ending == successfully registered User!");
 	}
 	
 	public Optional<User> login(User u) throws LoginUserFailedException {
-		
+		MDC.put(event, "Login");
+		log.info("Starting == Logging in user");
 		Optional<User> isLoggedIn = userDAO.findByEmailAndPassword(u.getEmail(), u.getPassword());
 		
 		if (!isLoggedIn.isPresent()) {
 			throw new LoginUserFailedException();
 		}
+		
+		MDC.put(uId, Integer.toString(isLoggedIn.get().getId()));
+		log.info(end);
 		return isLoggedIn;
 	}
 	
 	public List<User> getAllUsers(){
+		MDC.put(event, "Retrieve all users");
+		log.info("Starting == Looking for users");
+		
 		return userDAO.findAll();
 	}
 
