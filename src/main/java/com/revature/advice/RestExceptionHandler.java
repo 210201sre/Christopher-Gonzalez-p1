@@ -1,10 +1,12 @@
 package com.revature.advice;
 
 import org.slf4j.Logger;
+
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -13,6 +15,7 @@ import com.revature.exceptions.LoginException;
 import com.revature.exceptions.LoginUserFailedException;
 import com.revature.exceptions.RegisterUserFailedException;
 
+@ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler{
 	
 	private static final Logger log = LoggerFactory.getLogger(RestExceptionHandler.class);

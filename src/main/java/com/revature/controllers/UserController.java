@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.revature.annonations.Authorized;
 import com.revature.exceptions.LoginUserFailedException;
 import com.revature.exceptions.RegisterUserFailedException;
 import com.revature.models.Item;
@@ -47,12 +48,7 @@ public class UserController {
 	@PostMapping("/register")
 	public ResponseEntity<String> register(@Valid @RequestBody User u){
 		
-		try {
-			userService.register(u);
-		} catch (RegisterUserFailedException e) {
-			e.printStackTrace();
-			return new ResponseEntity<>("User is already registered.",HttpStatus.CONFLICT); 
-		}
+		userService.register(u);
 		
 		MDC.clear();
 		return new ResponseEntity<>("Registered successfully!",HttpStatus.CREATED);
@@ -61,19 +57,14 @@ public class UserController {
 	@PostMapping("login")
 	public ResponseEntity<String> login(@Valid @RequestBody User u, HttpServletResponse response){
 		
-		try {
+	
 			Optional<User> loggedInUser = userService.login(u);
 			loggedInUser.ifPresent(user -> {
 				Cookie cookie = new Cookie("my-key",Integer.toString(user.getId()));
 				cookie.setMaxAge(1 * 24 * 60 * 60);
 				response.addCookie(cookie);
 			});
-		} catch (LoginUserFailedException e) {
-			e.printStackTrace();
-			return new ResponseEntity<>("Email and/or Password not correct.",HttpStatus.BAD_REQUEST); 
-		}
-		
-		
+	
 		
 		MDC.clear();
 		return new ResponseEntity<>("Logged in successfully!",HttpStatus.OK);
@@ -93,17 +84,11 @@ public class UserController {
 		return ResponseEntity.ok(items);
 	}
 	
+	@Authorized
 	@PostMapping("items/{id}")
 	public ResponseEntity<String> addItemToCart(@PathVariable("id") String id, HttpServletRequest request){
 		
-		
-		Cookie cookies;
-		try{
-			cookies = request.getCookies()[0];
-		}
-		catch (Exception e) {
-			return new ResponseEntity<>("You need to login.",HttpStatus.BAD_REQUEST);
-		}
+		Cookie cookies = request.getCookies()[0];
 		
 		String cookie = cookies.getValue();
 		int userId = Integer.parseInt(cookie);
@@ -111,37 +96,35 @@ public class UserController {
 		int itemId = Integer.parseInt(id);
 		
 		cartService.addItemToCart(itemId,userId);
+		
 		log.info(end);
 		MDC.clear();
-        return new ResponseEntity<>("Item was successfully added to cart!",HttpStatus.CREATED);
+        
+		return new ResponseEntity<>("Item was successfully added to cart!",HttpStatus.CREATED);
 	}
 	
+	@Authorized
 	@PostMapping("order")
 	public ResponseEntity<String> addItemsToOrder(HttpServletRequest request){
-		Cookie cookies;
-		try{
-			cookies = request.getCookies()[0];
-		}
-		catch (Exception e) {
-			return new ResponseEntity<>("You need to login.",HttpStatus.BAD_REQUEST);
-		}
+		
+		Cookie cookies = request.getCookies()[0];
 		
 		String cookie = cookies.getValue();
 		int userId = Integer.parseInt(cookie);
 		
 		cartService.addItemToOrder(userId);
+		
 		MDC.clear();
+		
 		return new ResponseEntity<>("Cart was successfully ordered!",HttpStatus.CREATED);
 	}
+	
+	@Authorized
 	@PostMapping("logout")
 	public ResponseEntity<String> logout(HttpServletResponse response, HttpServletRequest request){
-		Cookie cookies;
-		try{
-			cookies = request.getCookies()[0];
-		}
-		catch (Exception e) {
-			return new ResponseEntity<>("You need to login.",HttpStatus.BAD_REQUEST);
-		}
+		
+		Cookie cookies = request.getCookies()[0];
+
 		String cookie = cookies.getValue();
 		int userId = Integer.parseInt(cookie);
 		
@@ -158,6 +141,7 @@ public class UserController {
 	
 	@GetMapping("users")
 	public ResponseEntity<List<User>> getUsers(){
+		
 		List<User> users = userService.getAllUsers();
 		
 		if (users.isEmpty()) {

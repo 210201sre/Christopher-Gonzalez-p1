@@ -26,7 +26,7 @@ public class UserService {
 	@Autowired
 	private UserDAO userDAO;
 	
-	public void register(User u) throws RegisterUserFailedException {
+	public void register(User u) {
 		MDC.put(event, "Register");
 		log.info("Starting == registering a new user");
 		Optional<User> isRegistered = userDAO.findByEmailAndPassword(u.getEmail(),u.getPassword());
@@ -41,7 +41,8 @@ public class UserService {
 		log.info("Ending == successfully registered User!");
 	}
 	
-	public Optional<User> login(User u) throws LoginUserFailedException {
+	
+	public Optional<User> login(User u) {
 		MDC.put(event, "Login");
 		log.info("Starting == Logging in user");
 		Optional<User> isLoggedIn = userDAO.findByEmailAndPassword(u.getEmail(), u.getPassword());

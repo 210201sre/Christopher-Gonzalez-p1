@@ -1,6 +1,6 @@
 package com.revature.exceptions;
 
-public class RegisterUserFailedException extends Exception{
+public class RegisterUserFailedException extends RuntimeException{
 
 	public RegisterUserFailedException() {
 	}

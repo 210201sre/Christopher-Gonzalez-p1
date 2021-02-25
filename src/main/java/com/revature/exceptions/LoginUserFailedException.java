@@ -1,6 +1,6 @@
 package com.revature.exceptions;
 
-public class LoginUserFailedException extends Exception{
+public class LoginUserFailedException extends RuntimeException{
 
 	public LoginUserFailedException() {
 	}

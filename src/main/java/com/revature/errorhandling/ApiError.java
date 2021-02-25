@@ -30,8 +30,7 @@ public class ApiError {
 		this();
 		this.status = status.value();
 		this.error = status.getReasonPhrase();
-		this.message = "No message available";
-		this.debugMessage = ex.getLocalizedMessage();
 		this.message = message;
+		this.debugMessage = ex.getLocalizedMessage();
 	}
 }
