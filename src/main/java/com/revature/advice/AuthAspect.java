@@ -5,10 +5,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.After;
-import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -26,23 +24,23 @@ public class AuthAspect {
 	@Autowired
 	private HttpServletRequest req;
 	
-	@Around("@annotation(authorized)")
-	public Object authenticate(ProceedingJoinPoint pjp, Authorized authorized) throws Throwable {
+	@Before("@annotation(authorized)")
+	public void authenticate(Authorized authorized) throws Throwable {
 		
-		HttpSession session = req.getSession(false);
+		Cookie []cookies = req.getCookies();
 		
-		if (session == null || session.getAttribute("my-key") == null) {
+		if ( cookies == null) {
 			log.error("Not logged in.");
 			throw new LoginException("You need to login.");
 		}
 		
+		Cookie cookie = cookies[0];
 		
-		Cookie cookie = (Cookie) session.getAttribute("my-key");
 		int userId = Integer.parseInt(cookie.getValue());
 		
 		MDC.put("event", "Authorized");
 		log.info("User# " + userId + "is authorized.");
 		
-		return pjp.proceed(pjp.getArgs());
+		return;
 	}
 }
