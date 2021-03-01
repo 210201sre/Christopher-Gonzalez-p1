@@ -24,6 +24,8 @@ services:
     - 3000:3000
     networks:
     - app
+    volumes:
+      - grafanastorage
     container_name: grafana
     depends_on:
     - loki
