@@ -17,7 +17,6 @@ public class CartService {
 
 	private static final Logger log = LoggerFactory.getLogger(CartService.class);
 	String event = "event";
-	String end = "Ending ==";
 	String uId = "userId";
 	
 	@Autowired
@@ -46,6 +45,5 @@ public class CartService {
 			log.info("user# " + userId + " ordered item# " + item.getId());
 		}
 		userCart.clear();
-		log.info(end);
 	}
 }

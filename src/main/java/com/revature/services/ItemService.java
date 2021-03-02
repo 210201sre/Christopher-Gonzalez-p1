@@ -16,7 +16,6 @@ public class ItemService {
 	
 	private static final Logger log = LoggerFactory.getLogger(ItemService.class);
 	String event = "event";
-	String end = "Ending ==";
 	
 	@Autowired
 	private ItemDAO itemDAO;

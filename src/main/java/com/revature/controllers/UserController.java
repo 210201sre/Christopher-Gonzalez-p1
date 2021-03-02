@@ -33,7 +33,6 @@ import com.revature.services.UserService;
 public class UserController {
 
 	private static final Logger log = LoggerFactory.getLogger(UserController.class);
-	String end = "Ending ==";
 	
 	@Autowired
 	private UserService userService;
@@ -79,7 +78,6 @@ public class UserController {
 			return ResponseEntity.noContent().build();
 		}
 		
-		log.info(end);
 		MDC.clear();
 		return ResponseEntity.ok(items);
 	}
@@ -97,7 +95,6 @@ public class UserController {
 		
 		cartService.addItemToCart(itemId,userId);
 		
-		log.info(end);
 		MDC.clear();
         
 		return new ResponseEntity<>("Item was successfully added to cart!",HttpStatus.CREATED);
@@ -147,7 +144,7 @@ public class UserController {
 		if (users.isEmpty()) {
 			return ResponseEntity.noContent().build();
 		}
-		log.info("Ending == successfully retrieved users!");
+		
 		MDC.clear();
 		return ResponseEntity.ok(users);
 	}

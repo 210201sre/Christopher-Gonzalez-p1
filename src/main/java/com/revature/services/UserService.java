@@ -20,7 +20,6 @@ public class UserService {
 
 	private static final Logger log = LoggerFactory.getLogger(UserService.class);
 	String event = "event";
-	String end = "Ending ==";
 	String uId = "userId";
 	
 	@Autowired
@@ -38,7 +37,6 @@ public class UserService {
 		else {
 			userDAO.insertToUsers(u.getEmail(),u.getPassword());
 		}
-		log.info("Ending == successfully registered User!");
 	}
 	
 	
@@ -52,7 +50,6 @@ public class UserService {
 		}
 		
 		MDC.put(uId, Integer.toString(isLoggedIn.get().getId()));
-		log.info(end);
 		return isLoggedIn;
 	}
 	

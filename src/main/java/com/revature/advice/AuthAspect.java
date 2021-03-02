@@ -39,7 +39,7 @@ public class AuthAspect {
 		int userId = Integer.parseInt(cookie.getValue());
 		
 		MDC.put("event", "Authorized");
-		log.info("User# " + userId + "is authorized.");
+		log.info("User# " + userId + " is authorized.");
 		
 		return;
 	}
