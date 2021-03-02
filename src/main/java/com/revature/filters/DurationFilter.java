@@ -30,7 +30,7 @@ public class DurationFilter extends OncePerRequestFilter{
 			String duration = String.format("%d", endTime - startTime);
 			
 			MDC.put("duration", duration);
-			log.info("Request has finished took {} mcd s to process", duration);
+			log.info("Request has finished took {} milli secs to process", duration);
 			MDC.clear();
 		}
 		
