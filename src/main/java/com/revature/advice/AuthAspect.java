@@ -31,7 +31,7 @@ public class AuthAspect {
 		
 		if ( cookies == null) {
 			log.error("Not logged in.");
-			throw new LoginException("You need to login.");
+			throw new LoginException();
 		}
 		
 		Cookie cookie = cookies[0];

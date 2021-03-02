@@ -120,6 +120,8 @@ public class UserController {
 	@PostMapping("logout")
 	public ResponseEntity<String> logout(HttpServletResponse response, HttpServletRequest request){
 		
+		MDC.put("event", "Logout");
+		log.info("Starting == Logging out user");
 		Cookie cookies = request.getCookies()[0];
 
 		String cookie = cookies.getValue();
