@@ -8,6 +8,7 @@ import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.revature.exceptions.CartEmptyException;
 import com.revature.models.Cart;
 import com.revature.repositories.CartDAO;
 import com.revature.repositories.OrderDAO;
@@ -37,7 +38,9 @@ public class CartService {
 		log.info("Starting == Adding item to Order");
 		
 		List<Cart> userCart = cartDAO.findByUserId(userId);
-		
+		if (userCart.isEmpty()) {
+			throw new CartEmptyException();
+		}
 		for (Cart item : userCart) {
 			cartDAO.deleteById(item.getId());
 			orderDAO.insertToOrders(item.getItem_id(), userId);

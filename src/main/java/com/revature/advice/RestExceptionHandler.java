@@ -14,6 +14,7 @@ import com.revature.errorhandling.ApiError;
 import com.revature.exceptions.LoginException;
 import com.revature.exceptions.LoginUserFailedException;
 import com.revature.exceptions.RegisterUserFailedException;
+import com.revature.exceptions.CartEmptyException;
 
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler{
@@ -53,5 +54,15 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler{
 		
 		String error = "You need to login.";
 		return buildResponseEntity(new ApiError(HttpStatus.BAD_REQUEST, error, ex));
+	}
+	
+	@ExceptionHandler(CartEmptyException.class)
+	public ResponseEntity<Object> handleEmptyCartException(CartEmptyException ex){
+		
+		MDC.put(event, "cart empty error");
+		log.error("There are no items in your cart.", ex);
+		
+		String error = "There are no items in your cart.";
+		return buildResponseEntity(new ApiError(HttpStatus.BAD_REQUEST, error ,ex));
 	}
 }
