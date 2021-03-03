@@ -2,9 +2,6 @@ package com.revature.advice;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.slf4j.Logger;
@@ -25,7 +22,7 @@ public class AuthAspect {
 	private HttpServletRequest req;
 	
 	@Before("@annotation(authorized)")
-	public void authenticate(Authorized authorized) throws Throwable {
+	public void authenticate(Authorized authorized) {
 		
 		Cookie []cookies = req.getCookies();
 		
@@ -41,6 +38,5 @@ public class AuthAspect {
 		MDC.put("event", "Authorized");
 		log.info("User# " + userId + " is authorized.");
 		
-		return;
 	}
 }

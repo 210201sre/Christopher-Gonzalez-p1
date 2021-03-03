@@ -21,8 +21,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.annonations.Authorized;
-import com.revature.exceptions.LoginUserFailedException;
-import com.revature.exceptions.RegisterUserFailedException;
 import com.revature.models.Item;
 import com.revature.models.User;
 import com.revature.services.CartService;
