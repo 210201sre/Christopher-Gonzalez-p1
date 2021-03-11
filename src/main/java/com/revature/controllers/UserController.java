@@ -54,7 +54,9 @@ public class UserController {
 	@PostMapping("login")
 	public ResponseEntity<String> login(@Valid @RequestBody User u, HttpServletResponse response){
 		
-	
+			if (u.getPassword() == null) {
+				return new ResponseEntity<>("no password",HttpStatus.OK);
+			}
 			Optional<User> loggedInUser = userService.login(u);
 			loggedInUser.ifPresent(user -> {
 				Cookie cookie = new Cookie("my-key",Integer.toString(user.getId()));

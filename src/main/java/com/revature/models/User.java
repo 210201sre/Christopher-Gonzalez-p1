@@ -32,8 +32,8 @@ public class User {
 	@Email
 	private String email;
 	
-	@Length(min = 3)
-	@NotBlank
+//	@Length(min = 3)
+//	@NotBlank
 	private String password;
 	
 	@OneToMany

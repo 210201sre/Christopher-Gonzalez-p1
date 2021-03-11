@@ -28,7 +28,7 @@ public class UserService {
 	public void register(User u) {
 		MDC.put(event, "Register");
 		log.info("Starting == registering a new user");
-		Optional<User> isRegistered = userDAO.findByEmailAndPassword(u.getEmail(),u.getPassword());
+		Optional<User> isRegistered = userDAO.findByEmail(u.getEmail());
 		
 		if (isRegistered.isPresent()) {
 			throw new RegisterUserFailedException();
