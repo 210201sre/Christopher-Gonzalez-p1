@@ -13,6 +13,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import com.revature.errorhandling.ApiError;
 import com.revature.exceptions.LoginException;
 import com.revature.exceptions.LoginUserFailedException;
+import com.revature.exceptions.NoPasswordExcpetion;
 import com.revature.exceptions.RegisterUserFailedException;
 import com.revature.exceptions.CartEmptyException;
 
@@ -64,5 +65,14 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler{
 		
 		String error = "There are no items in your cart.";
 		return buildResponseEntity(new ApiError(HttpStatus.BAD_REQUEST, error ,ex));
+	}
+	
+	@ExceptionHandler(NoPasswordExcpetion.class)
+	public ResponseEntity<Object> handleNoPasswordExcpetion(NoPasswordExcpetion ex){
+		MDC.put(event, "no password error");
+		log.error("No password entered.");
+		
+		String error = "No password entered.";
+		return buildResponseEntity(new ApiError(HttpStatus.UNAUTHORIZED, error, ex));
 	}
 }

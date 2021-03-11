@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.annonations.Authorized;
+import com.revature.exceptions.NoPasswordExcpetion;
 import com.revature.models.Item;
 import com.revature.models.User;
 import com.revature.services.CartService;
@@ -45,6 +46,9 @@ public class UserController {
 	@PostMapping("/register")
 	public ResponseEntity<String> register(@Valid @RequestBody User u){
 		
+		if (u.getPassword().equals("")) {
+			throw new NoPasswordExcpetion();
+		}
 		userService.register(u);
 		
 		MDC.clear();
@@ -54,9 +58,7 @@ public class UserController {
 	@PostMapping("login")
 	public ResponseEntity<String> login(@Valid @RequestBody User u, HttpServletResponse response){
 		
-			if (u.getPassword() == null) {
-				return new ResponseEntity<>("no password",HttpStatus.OK);
-			}
+
 			Optional<User> loggedInUser = userService.login(u);
 			loggedInUser.ifPresent(user -> {
 				Cookie cookie = new Cookie("my-key",Integer.toString(user.getId()));
