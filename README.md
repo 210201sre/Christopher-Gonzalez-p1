@@ -65,8 +65,5 @@ users can buy are stored in the Items table. User's carts are stored in the Cart
 * Get Items: GET http://a62d60162057149549617360016d2e38-542496291.us-east-1.elb.amazonaws.com/online-store/p1/items
 * Add Item to Cart: POST http://a62d60162057149549617360016d2e38-542496291.us-east-1.elb.amazonaws.com/online-store/p1/items
 
-## Contributors
-Christopher Gonzalez
-
 ## License
 This project uses the following license: GNU General Public License v3.0
